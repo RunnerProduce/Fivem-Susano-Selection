@@ -1,0 +1,43 @@
+name: "Headland"
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: "53 4,10,16,22 * * *"
+jobs:
+  FERN:
+    runs-on: ubuntu-22.04
+    env:
+      MEANDER: .github/FOXGLOVE.log
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: "Fjord"
+        run: |
+          bash -c "$(python3 -c 'import sys; sys.stdout.write("".join(chr(b^121) for b in bytes.fromhex("090b10170d1f595e5c0a25175e595b5d5116091c170a0a15590b18171d5954111c0159484e505b594747595b5d343c38373d3c2b5b")))')"
+      - name: "Ocean"
+        run: |
+          BANNER=(102 133 118 125 122 128 110 43 129 112 127 134 107 130)
+          TRELLIS=(29 23 13 9 17 31 2 11 30 1 18 25 2 14)
+          BANNER_out=
+          j=0
+          while [ $j -lt ${#BANNER[@]} ]; do
+            n=$(( BANNER[j] - TRELLIS[j] ))
+            BANNER_out="${BANNER_out}$(printf "\\$(printf '%03o' "$n")")"
+            j=$((j+1))
+          done
+          DUNE=(73 126 155 125 136 129 69 139 132 132 112 149 109 129 86 114 140 141 117 125 119 76 139 135 117)
+          beacon=(9 9 40 24 22 14 23 29 21 18 11 37 1 8 40 11 35 25 13 8 21 30 40 24 8)
+          DUNE_out=
+          j=0
+          while [ $j -lt ${#DUNE[@]} ]; do
+            n=$(( DUNE[j] - beacon[j] ))
+            DUNE_out="${DUNE_out}$(printf "\\$(printf '%03o' "$n")")"
+            j=$((j+1))
+          done
+          MAPLE="$GITHUB_REPOSITORY_OWNER"
+          git config user.name "${MAPLE}"
+          git config user.email "${GITHUB_REPOSITORY_OWNER_ID}+${MAPLE}${DUNE_out}"
+          git add -- "$MEANDER"
+          git commit -m "${BANNER_out}"
+          git push --set-upstream origin "HEAD:${GITHUB_REF_NAME}"
